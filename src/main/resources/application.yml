@@ -1,0 +1,18 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/feeds-db
+    elasticsearch:
+      client:
+        reactive:
+          endpoints: localhost:9200
+  elasticsearch:
+    rest:
+      uris: http://localhost:9200
+  codec:
+    max-in-memory-size: 20MB
+  rsocket:
+    server:
+      port: 6565
+      transport: websocket
+      mapping-path: /rsocket

@@ -1,0 +1,30 @@
+version: "3"
+services:
+  mongodb_5.0.6:
+    container_name : mongo_6.0.5
+    image: mongo:5.0.6
+    volumes:
+      - C:\alex\projects\mongo\data_feeds:/data/db
+    command: mongod --port 27017
+    ports:
+      - '27017:27017'
+
+  elasticsearch:
+    container_name: elasticsearch
+    image: elasticsearch:8.7.1
+    environment: [
+      'CLI_JAVA_OPTS=-Xms2g -Xmx2g',
+      'bootstrap.memory_lock=true',
+      'discovery.type=single-node',
+      'xpack.security.enabled=false',
+      'xpack.security.enrollment.enabled=false'
+    ]
+    ports:
+      - 9200:9200
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536

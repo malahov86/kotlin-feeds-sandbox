@@ -1,0 +1,80 @@
+DELETE /articles
+
+PUT /articles
+{
+  "settings": {
+    "analysis": {
+      "analyzer": {
+        "htmlStripAnalyzer": {
+          "type": "custom",
+          "tokenizer": "standard",
+          "filter": ["lowercase"],
+          "char_filter": [
+            "html_strip"
+          ]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "feedId": {
+        "type": "text"
+      },
+      "content": {
+        "type": "text",
+        "analyzer": "htmlStripAnalyzer",
+        "term_vector": "yes"
+      }
+    }  
+  }
+}
+
+GET /articles/_search
+{
+    "query": {
+        "match_all": {}
+    }
+}
+
+POST /articles/_search
+{
+  "query": {
+    "match": {
+      "content": "Thanks for reading, and check back next week"
+    }
+  }
+}
+
+GET /articles/_search
+{
+  "size": 2,
+  "query": {
+    "more_like_this" : {
+      "fields" : ["content"],
+      "like" : "Thanks for reading",
+      "min_term_freq" : 1,
+      "max_query_terms" : 100,
+      "min_doc_freq": 2
+    }
+  }
+}
+
+
+GET /articles/_search
+{
+  "size": 2,
+  "query": {
+    "more_like_this" : {
+      "fields" : ["content"],
+      "like" : [{
+        "_index": "articles",
+        "_id": "65b36d50b1ce073fe947a6f1"
+      }],
+      "min_term_freq" : 1,
+      "max_query_terms" : 100,
+      "min_doc_freq": 2
+    }
+  }
+}
+
